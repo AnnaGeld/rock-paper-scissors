@@ -58,7 +58,7 @@ function printTable(table) {
   const cellWidth = 12;
 
   function printHorizontalLine() {
-    const line = '+'.padEnd(cellWidth + 1, '-');
+    const line = '+'.padEnd(cellWidth + 3, '-');
     console.log(line.repeat(n) + '+');
   }
 
