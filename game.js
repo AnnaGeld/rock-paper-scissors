@@ -1,12 +1,17 @@
 const crypto = require('crypto');
+const Table = require('cli-table');
+
+
 
 function generateTable(moves) {
+
   const n = moves.length;
   const table = Array.from({ length: n + 1 }, () => Array(n + 1).fill(' '));
 
   for (let i = 1; i <= n; i++) {
     table[0][i] = moves[i - 1];
     table[i][0] = moves[i - 1];
+  
   }
 
   for (let i = 1; i <= n; i++) {
@@ -14,6 +19,7 @@ function generateTable(moves) {
       table[i][j] = compareMoves(moves[i - 1], moves[j - 1], moves);
     }
   }
+
 
   return table;
 }
@@ -49,9 +55,13 @@ function calculateHmac(key, message) {
 
 function printTable(table) {
   const n = table.length;
-  const cellWidth = 12; 
+  const cellWidth = 12;
 
-  
+  function printHorizontalLine() {
+    const line = '+'.padEnd(cellWidth + 1, '-');
+    console.log(line.repeat(n) + '+');
+  }
+
   let headerRow = '| v PC\\User >';
   for (let i = 1; i < n; i++) {
     headerRow += ` | ${table[0][i].padEnd(cellWidth)}`;
@@ -59,24 +69,20 @@ function printTable(table) {
   headerRow += ' |';
   console.log(headerRow);
 
-  
-  let separatorRow = '+'.padEnd(cellWidth + 2, '-');
-  for (let i = 1; i < n; i++) {
-    separatorRow += '+'.padEnd(cellWidth + 2, '-');
-  }
-  separatorRow += '+';
-  console.log(separatorRow);
-
+  printHorizontalLine();
 
   for (let i = 1; i < n; i++) {
-    let row = `| ${table[i][0].padEnd(cellWidth)}`;
+    let row = '| ' + table[i][0].padEnd(cellWidth);
     for (let j = 1; j < n; j++) {
       row += ` | ${table[i][j].padEnd(cellWidth)}`;
     }
     row += ' |';
     console.log(row);
+
+    printHorizontalLine();
   }
 }
+
 
 function playGame(moves) {
   const key = crypto.randomBytes(32);
