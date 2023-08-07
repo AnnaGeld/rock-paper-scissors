@@ -1,17 +1,15 @@
 const crypto = require('crypto');
-const Table = require('cli-table');
+const Table = require('cli-table3');
 
 
 
 function generateTable(moves) {
-
   const n = moves.length;
   const table = Array.from({ length: n + 1 }, () => Array(n + 1).fill(' '));
 
   for (let i = 1; i <= n; i++) {
     table[0][i] = moves[i - 1];
     table[i][0] = moves[i - 1];
-  
   }
 
   for (let i = 1; i <= n; i++) {
@@ -19,7 +17,6 @@ function generateTable(moves) {
       table[i][j] = compareMoves(moves[i - 1], moves[j - 1], moves);
     }
   }
-
 
   return table;
 }
@@ -57,31 +54,15 @@ function printTable(table) {
   const n = table.length;
   const cellWidth = 12;
 
-  function printHorizontalLine() {
-    const line = '+'.padEnd(cellWidth + 1, '-');
-    console.log(line.repeat(n) + '+');
-  }
-
-  let headerRow = '| v PC\\User >';
-  for (let i = 1; i < n; i++) {
-    headerRow += ` | ${table[0][i].padEnd(cellWidth)}`;
-  }
-  headerRow += ' |';
-  console.log(headerRow);
-
-  printHorizontalLine();
+  const cliTable = new Table({ head: [table[0][0], ...table[0].slice(1)] });
 
   for (let i = 1; i < n; i++) {
-    let row = '| ' + table[i][0].padEnd(cellWidth);
-    for (let j = 1; j < n; j++) {
-      row += ` | ${table[i][j].padEnd(cellWidth)}`;
-    }
-    row += ' |';
-    console.log(row);
-
-    printHorizontalLine();
+    cliTable.push([table[i][0], ...table[i].slice(1)]);
   }
+
+  console.log(cliTable.toString());
 }
+
 
 
 function playGame(moves) {
